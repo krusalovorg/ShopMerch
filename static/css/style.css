@@ -1,0 +1,68 @@
+pp {
+    padding-left: 20px;
+}
+
+.item {
+    border: 1px solid green;
+    border-radius: 10px;
+    padding: 7px;
+    margin: 2px;
+}
+
+.itemin {
+    padding: 13px 15px;
+}
+.cat {
+    text-decoration: none;
+    color: black;
+}
+
+.checks {
+    display: inline-block;
+    margin-left: 55%;
+    margin-top: 5%;
+}
+
+.chitem {
+margin-left: 860px;
+}
+
+.ll {
+display:inline-block;
+line-height: 2em;
+}
+
+.tx {
+    font-size: 90%;
+    color: #23a843;
+    border: 1px solid #23a843;
+    border-radius: 5px;
+    padding: 6px;
+    display:inline-block;
+    }
+
+.asd {
+padding: 15px;
+}
+
+.product{
+    border: 1px solid green;
+    border-radius: 10px;
+    display: inline-block;
+    padding: 7px;
+    margin: 2px;
+    height:400px;
+}
+
+.pay {
+padding-top: 10px;
+padding-bottom: 10px
+}
+
+.prod_url {
+color: #23a843;
+text-decoration: none;
+}
+.prod_url:hover {
+    color: green;
+   }
