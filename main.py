@@ -6,7 +6,7 @@ from flask_login import LoginManager, login_user, login_required, logout_user, \
 
 from forms.search import SearchForm
 from forms.users import RegisterForm, LoginForm
-# from forms.add import AddForm for /add
+from forms.add import AddForm
 from forms.pay import PayForm
 from data.goods import Goods
 from data.users import User
@@ -21,7 +21,7 @@ login_manager.init_app(app)
 app.config['SECRET_KEY'] = 'secreret123123'
 
 res = []
-categories = ['Телевизоры', 'Смартфоны', 'Одежда', 'Обувь', 'Игрушки']
+categories = ['Телевизоры', 'Смартфоны', 'Одежда', 'Обувь', 'Игрушки', 'говно']
 
 
 def get_favs():
@@ -169,34 +169,37 @@ def basket():
                            ords=ords, summ=summ, form2=form)
 
 
-#
-# @app.route('/add', methods=['GET', 'POST'])
-# def add():
-#     form2 = SearchForm()
-#     if form2.validate_on_submit():
-#         db_sess = db_session.create_session()
-#         goods = db_sess.query(Goods)
-#         for i in goods:
-#             if str(form2.ttle.data).lower() in str(i.title).lower():
-#                 res.append(i.id)
-#         return redirect('/search_results')
-#
-#     form3 = AddForm()
-#     if form3.validate_on_submit():
-#         db_sess = db_session.create_session()
-#         product = Goods(
-#             title=form3.title.data,
-#             cost=form3.cost.data,
-#             description=form3.description.data,
-#             category=form3.category.data,
-#             rate=form3.rate.data,
-#             image=form3.image.data,
-#         )
-#         db_sess.add(product)
-#         db_sess.commit()
-#         return redirect('/')
-#     return render_template('add.html', title='Добавление товара', form2=form2,
-#                            form3=form3)
+
+@app.route('/add', methods=['GET', 'POST'])
+def add():
+    print(current_user.role)
+    if current_user.is_authenticated and current_user.role == "admin":
+        form2 = SearchForm()
+        if form2.validate_on_submit():
+            db_sess = db_session.create_session()
+            goods = db_sess.query(Goods)
+            for i in goods:
+                if str(form2.ttle.data).lower() in str(i.title).lower():
+                    res.append(i.id)
+            return redirect('/search_results')
+        form3 = AddForm()
+        if form3.validate_on_submit():
+            db_sess = db_session.create_session()
+            product = Goods(
+                title=form3.title.data,
+                cost=form3.cost.data,
+                description=form3.description.data,
+                category=form3.category.data,
+                rate=form3.rate.data,
+                image=form3.image.data,
+            )
+            db_sess.add(product)
+            db_sess.commit()
+            return redirect('/')
+        return render_template('add.html', title='Добавление товара', form2=form2,
+                                form3=form3)
+    else:
+        return redirect('/')
 
 
 @app.route('/pay', methods=['GET', 'POST'])
@@ -340,11 +343,20 @@ def reqister():
                                    form=form,
                                    message="Такой пользователь уже есть",
                                    form2=form2)
-        user = User(
-            surname=form.surname.data,
-            name=form.name.data,
-            email=form.email.data,
-        )
+        if form.email.data == "adminpanel@adminpanel.adminpanel":
+            user = User(
+                surname=form.surname.data,
+                name=form.name.data,
+                email=form.email.data,
+                role="admin"
+            )
+        else:
+            user = User(
+                surname=form.surname.data,
+                name=form.name.data,
+                email=form.email.data,
+                role="user"
+            )
         user.set_password(form.password.data)
         db_sess.add(user)
         db_sess.commit()
