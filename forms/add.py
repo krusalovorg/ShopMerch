@@ -8,7 +8,6 @@ class AddForm(FlaskForm):
     title = StringField('Название', validators=[DataRequired()])
     description = StringField('Описание', validators=[DataRequired()])
     category = StringField('Категория', validators=[DataRequired()])
-    rate = IntegerField('Оценка 0-5', validators=[DataRequired()])
     cost = IntegerField('Цена (без пробелов)', validators=[DataRequired()])
     image = FileField('Картинка', validators=[DataRequired()])
     submit = SubmitField('Добавить')

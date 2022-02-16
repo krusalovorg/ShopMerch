@@ -206,8 +206,13 @@ def add():
                 description=form3.description.data,
                 category=form3.category.data,
                 rate=0,
-                image=form3.image.data,
+                image="static/img/"+form3.image.data,
             )
+            img = form3.image.data
+            print(form3.image, form3.data)
+            filename = img.data.filename
+            form3.image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
             db_sess.add(product)
             db_sess.commit()
             return redirect('/')
