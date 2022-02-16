@@ -182,11 +182,12 @@ def basket():
     return render_template("basket.html", title='Корзина', goods=goods,
                            ords=ords, summ=summ, form2=form)
 
-
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route('/add', methods=['GET', 'POST'])
 def add():
-    print(current_user.role)
     if current_user.is_authenticated and current_user.role == "admin":
         form2 = SearchForm()
         if form2.validate_on_submit():
@@ -204,7 +205,7 @@ def add():
                 cost=form3.cost.data,
                 description=form3.description.data,
                 category=form3.category.data,
-                rate=form3.rate.data,
+                rate=0,
                 image=form3.image.data,
             )
             db_sess.add(product)
@@ -264,7 +265,8 @@ def favorites():
 
 @app.route('/search_results', methods=['GET', 'POST'])
 def search_results():
-    global res, categories
+    global res
+    categories = get_category()
     form = SearchForm()
     if form.validate_on_submit():
         res.clear()
@@ -287,7 +289,8 @@ def search_results():
 
 @app.route("/categories/<int:r>", methods=['GET', 'POST'])
 def cat(r):
-    global res, categories
+    global res
+    categories = get_category()
     form = SearchForm()
     if form.validate_on_submit():
         db_sess = db_session.create_session()

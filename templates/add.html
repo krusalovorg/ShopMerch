@@ -12,6 +12,7 @@
     </p>
     {% endfor %}
     </p>
+
     <p>
         {{ form3.cost.label }}<br>
         {{ form3.cost(class="form-control") }}<br>
@@ -21,6 +22,7 @@
     </p>
     {% endfor %}
     </p>
+
     <p>
         {{ form3.description.label }}<br>
         {{ form3.description(class="form-control") }}<br>
@@ -30,15 +32,7 @@
     </p>
     {% endfor %}
     </p>
-    <p>
-        {{ form3.rate.label }}<br>
-        {{ form3.rate(class="form-control") }}<br>
-        {% for error in form3.rate.errors %}
-    <p content="alert alert-danger" role="alert">
-        {{ error }}
-    </p>
-    {% endfor %}
-    </p>
+
     <p>
         {{ form3.category.label }}<br>
         {{ form3.category(class="form-control") }}<br>
@@ -48,6 +42,14 @@
     </p>
     {% endfor %}
 
+    <p>
+        {{ form3.image.label }}<br>
+        {{ form3.image(class="form-control") }}<br>
+        {% for error in form3.image.errors %}
+    <p content="alert alert-danger" role="alert">
+        {{ error }}
+    </p>
+    {% endfor %}
 
 
     <p>{{ form3.submit(type="submit", class="btn btn-primary") }}</p>
