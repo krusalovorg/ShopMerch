@@ -15,14 +15,17 @@ from data import db_session
 
 # from forms.check import ChecksForm  # new
 
+UPLOAD_FOLDER = '/static/img/'
+
 app = Flask(__name__)
 login_manager = LoginManager()
 login_manager.init_app(app)
 app.config['SECRET_KEY'] = 'secreret123123'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 res = []
-categories = ['Телевизоры', 'Смартфоны', 'Одежда', 'Обувь', 'Игрушки', 'говно']
 
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
 def get_favs():
     favs = []
@@ -36,6 +39,16 @@ def get_favs():
                     if i.id == j.favs_id:
                         favs.append(i.id)
     return favs
+
+def get_category():
+    category = []
+    db_sess = db_session.create_session()
+    goods = db_sess.query(Goods)
+    if current_user.is_authenticated:
+        for item in goods:
+            if item.category not in category:
+                category.append(item.category)
+    return category
 
 
 def get_ords():
@@ -116,7 +129,8 @@ def func_run():
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
-    global res, categories
+    global res
+    categories = get_category()
     res.clear()
     form = SearchForm()
     if form.validate_on_submit():
