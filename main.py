@@ -15,7 +15,7 @@ from data import db_session
 
 # from forms.check import ChecksForm  # new
 
-UPLOAD_FOLDER = '/static/img/'
+UPLOAD_FOLDER = 'static/img/'
 
 app = Flask(__name__)
 login_manager = LoginManager()
@@ -208,10 +208,12 @@ def add():
                 rate=0,
                 image="static/img/"+form3.image.data,
             )
-            img = form3.image.data
-            print(form3.image, form3.data)
-            filename = img.data.filename
-            form3.image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            #image_data = request.files[form3.image.name].read()
+            print(request.files[form3.ima])
+            #open(os.path.join(app.config['UPLOAD_FOLDER'], form3.image.data), 'w').write(image_data)
+
+            #img = form3.image
+            #img.file.save(os.path.join(app.config['UPLOAD_FOLDER'], form3.image.file.filename))
 
             db_sess.add(product)
             db_sess.commit()
