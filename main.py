@@ -407,14 +407,16 @@ def reqister():
                 surname=form.surname.data,
                 name=form.name.data,
                 email=form.email.data,
-                role="admin"
+                role="admin",
+                balance=0
             )
         else:
             user = User(
                 surname=form.surname.data,
                 name=form.name.data,
                 email=form.email.data,
-                role="user"
+                role="user",
+                balance=0
             )
         user.set_password(form.password.data)
         db_sess.add(user)
