@@ -18,17 +18,21 @@ class User(SqlAlchemyBase, UserMixin):
     email = sqlalchemy.Column(sqlalchemy.String, unique=True, nullable=True)
     hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     role = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    balance = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
 
     # goods = orm.relation("Goods")
 
     def __repr__(self):
-        return f'<User> {self.id} {self.name} {self.surname} {self.email} {self.role}'
+        return f'<User> {self.id} {self.name} {self.surname} {self.email} {self.role} {self.balance}'
 
     def set_password(self, password):
         self.hashed_password = generate_password_hash(password)
 
     def check_password(self, password):
         return check_password_hash(self.hashed_password, password)
+
+    def get_buys(self):
+        return self.buy
 
     def this_admin(self):
         if self.role == "admin":

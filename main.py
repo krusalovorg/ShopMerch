@@ -200,17 +200,18 @@ def add():
         form3 = AddForm()
         if form3.validate_on_submit():
             db_sess = db_session.create_session()
+
+            file = request.files["file"]
+            filename = file.filename
             product = Goods(
                 title=form3.title.data,
                 cost=form3.cost.data,
                 description=form3.description.data,
                 category=form3.category.data,
                 rate=0,
-                image="static/img/"+form3.image.data,
+                image="static/img/"+filename,
             )
-            #image_data = request.files[form3.image.name].read()
-            print(request.files[form3.ima])
-            #open(os.path.join(app.config['UPLOAD_FOLDER'], form3.image.data), 'w').write(image_data)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
             #img = form3.image
             #img.file.save(os.path.join(app.config['UPLOAD_FOLDER'], form3.image.file.filename))
