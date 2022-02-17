@@ -110,6 +110,11 @@ def func_run():
     elif z == "remove":
         if current_user.is_authenticated and current_user.role == "admin":
             print("delete", x,y,z)
+            db_sess = db_session.create_session()
+            item = db_sess.query(Goods).filter(Goods.id == int(x)).first()
+            if item:
+                db_sess.delete(item)
+                db_sess.commit()
     else:
         if y == 'true':
             db_sess = db_session.create_session()
