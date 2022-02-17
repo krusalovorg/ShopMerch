@@ -445,7 +445,8 @@ def reqister():
                 surname=form.surname.data,
                 name=form.name.data,
                 email=form.email.data,
-                role="admin"
+                role="admin",
+                balance=0
             )
         else:
             user = User(
