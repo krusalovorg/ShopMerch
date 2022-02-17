@@ -97,7 +97,6 @@ def func_run():
     x = request.args.get('par_1')
     y = request.args.get('par_2')
     z = request.args.get('par_3')
-    print(z)
     if z == '2':
         if y == 'true':
             db_sess = db_session.create_session()
@@ -131,8 +130,11 @@ def func_run():
 
             con = sqlite3.connect(db)
             cur = con.cursor()
-            cur.execute("UPDATE goods SET sale = ? WHERE id = ?", (z.split(' ')[1], int(x)))
-            con.commit()
+            if len(z.split(' ')[1]) == 0:
+                print('скидка пустая')
+            else:
+                cur.execute("UPDATE goods SET sale = ? WHERE id = ?", (z.split(' ')[1], int(x)))
+                con.commit()
 
     else:
         if y == 'true':
@@ -453,8 +455,7 @@ def reqister():
                 surname=form.surname.data,
                 name=form.name.data,
                 email=form.email.data,
-                role="user",
-                balance=1000
+                role="user"
             )
         user.set_password(form.password.data)
         db_sess.add(user)
