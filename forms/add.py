@@ -10,6 +10,7 @@ class AddForm(FlaskForm):
     #category = StringField('Категория', validators=[DataRequired()])
     category = SelectField(choices=[('Выберети категорию', '')])
     cost = IntegerField('Цена (без пробелов)', validators=[DataRequired()])
+    new_category = StringField('Новая Категория')
     #image = FileField('Картинка', validators=[DataRequired()])
     submit = SubmitField('Добавить')
     # <p>

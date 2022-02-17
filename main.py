@@ -162,9 +162,14 @@ def index():
     #     )
     #     db_sess.add(assoc)
     #     db_sess.commit()
-    return render_template("main.html", title='Главная страница', goods=goods,
-                           favs=get_favs(), ords=get_ords(),
-                           form2=form, cats=categories, role=current_user.role)
+    if current_user.is_authenticated:
+        return render_template("main.html", title='Главная страница', goods=goods,
+                               favs=get_favs(), ords=get_ords(),
+                               form2=form, cats=categories, role=current_user.role)
+    else:
+        return render_template("main.html", title='Главная страница', goods=goods,
+                               favs=get_favs(), ords=get_ords(),
+                               form2=form, cats=categories, role=False)
 
 
 @app.route('/basket', methods=['GET', 'POST'])
@@ -220,16 +225,23 @@ def add():
         form3 = AddForm()
         cats = get_category_choice()
         form3.category.choices = cats
-        if form3.validate_on_submit() and form3.category.data != "Выберети категорию":
+        if form3.validate_on_submit() and ((form3.category.data == "Выберети категорию" and form3.new_category.data != "") or (form3.category.data != "Выберети категорию" and form3.new_category.data == "")):
             db_sess = db_session.create_session()
 
             file = request.files["file"]
             filename = file.filename
+
+            caty = ""
+            if form3.category.data == "Выберети категорию":
+                caty = form3.new_category.data
+            else:
+                caty = form3.category.data
+
             product = Goods(
                 title=form3.title.data,
                 cost=form3.cost.data,
                 description=form3.description.data,
-                category=form3.category.data,
+                category=caty,
                 rate=0,
                 image="static/img/"+filename,
             )

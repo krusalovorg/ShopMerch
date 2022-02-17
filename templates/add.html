@@ -42,7 +42,16 @@
     </p>
     {% endfor %}
 
-    <input type=file name=file>
+    <p>
+        {{ form3.new_category.label }}<br>
+        {{ form3.new_category(class="form-control") }}<br>
+        {% for error in form3.new_category.errors %}
+    <p content="alert alert-danger" role="alert">
+        {{ error }}
+    </p>
+    {% endfor %}
+
+    <input type=file name=file class="form-control">
 
     <p>{{ form3.submit(type="submit", class="btn btn-primary") }}</p>
     {{ message }}
