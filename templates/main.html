@@ -46,17 +46,6 @@
 function alertreg(time){
     alert('Сначала нужно авторизоваться!');
 }
-
-
-
-
-
-
-
-
-
-
-
 </script>
 
 <p align="center" style="font-size:35px">Категории</p>
@@ -71,7 +60,9 @@ function alertreg(time){
 {% for item in goods %}
 
 <div class="row item">
-
+    {% if role == "admin" %}
+    <button class="btn btn-danger" onclick="func({{item.id+100}}, 'remove')">Delete</button>
+    {% endif %}
     <div class="col-3 itemin">
         <img src={{item.image}} alt="" width="150" height="150"
              class="d-inline-block align-text-top">

@@ -107,6 +107,9 @@ def func_run():
                                                   Association.orders_id == int(x) - 100).first()
             db_sess.delete(a)
             db_sess.commit()
+    elif z == "remove":
+        if current_user.is_authenticated and current_user.role == "admin":
+            print("delete", x,y,z)
     else:
         if y == 'true':
             db_sess = db_session.create_session()
@@ -156,7 +159,7 @@ def index():
     #     db_sess.commit()
     return render_template("main.html", title='Главная страница', goods=goods,
                            favs=get_favs(), ords=get_ords(),
-                           form2=form, cats=categories)
+                           form2=form, cats=categories, role=current_user.role)
 
 
 @app.route('/basket', methods=['GET', 'POST'])
@@ -186,6 +189,18 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+def get_category_choice():
+    category = [('Выберети категорию', 'Выберети категорию')]
+    buffer = []
+    db_sess = db_session.create_session()
+    goods = db_sess.query(Goods)
+    if current_user.is_authenticated:
+        for item in goods:
+            if item.category not in buffer:
+                category.append((item.category, item.category))
+                buffer.append(item.category)
+    return category
+
 @app.route('/add', methods=['GET', 'POST'])
 def add():
     if current_user.is_authenticated and current_user.role == "admin":
@@ -198,7 +213,9 @@ def add():
                     res.append(i.id)
             return redirect('/search_results')
         form3 = AddForm()
-        if form3.validate_on_submit():
+        cats = get_category_choice()
+        form3.category.choices = cats
+        if form3.validate_on_submit() and form3.category.data != "Выберети категорию":
             db_sess = db_session.create_session()
 
             file = request.files["file"]
