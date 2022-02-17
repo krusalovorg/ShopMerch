@@ -15,6 +15,11 @@ from data import db_session
 
 # from forms.check import ChecksForm  # new
 
+
+import sqlite3  # new!!!!!!!!!
+
+db = 'db/db.db'  # new !!!!!!!
+
 UPLOAD_FOLDER = 'static/img/'
 
 app = Flask(__name__)
@@ -26,6 +31,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 res = []
 
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+
 
 def get_favs():
     favs = []
@@ -39,6 +45,7 @@ def get_favs():
                     if i.id == j.favs_id:
                         favs.append(i.id)
     return favs
+
 
 def get_category():
     category = []
@@ -90,6 +97,7 @@ def func_run():
     x = request.args.get('par_1')
     y = request.args.get('par_2')
     z = request.args.get('par_3')
+    print(z)
     if z == '2':
         if y == 'true':
             db_sess = db_session.create_session()
@@ -109,12 +117,23 @@ def func_run():
             db_sess.commit()
     elif z == "remove":
         if current_user.is_authenticated and current_user.role == "admin":
-            print("delete", x,y,z)
+            print("delete", x, y, z)
             db_sess = db_session.create_session()
             item = db_sess.query(Goods).filter(Goods.id == int(x)).first()
             if item:
                 db_sess.delete(item)
+
                 db_sess.commit()
+
+    elif z.startswith('sale'):
+        if current_user.is_authenticated and current_user.role == "admin":
+            print("add sale", x, y, z)
+
+            con = sqlite3.connect(db)
+            cur = con.cursor()
+            cur.execute("UPDATE goods SET sale = ? WHERE id = ?", (z.split(' ')[1], int(x)))
+            con.commit()
+
     else:
         if y == 'true':
             db_sess = db_session.create_session()
@@ -195,9 +214,11 @@ def basket():
     return render_template("basket.html", title='Корзина', goods=goods,
                            ords=ords, summ=summ, form2=form)
 
+
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 def get_category_choice():
     category = [('Выберети категорию', 'Выберети категорию')]
@@ -210,6 +231,7 @@ def get_category_choice():
                 category.append((item.category, item.category))
                 buffer.append(item.category)
     return category
+
 
 @app.route('/add', methods=['GET', 'POST'])
 def add():
@@ -225,7 +247,9 @@ def add():
         form3 = AddForm()
         cats = get_category_choice()
         form3.category.choices = cats
-        if form3.validate_on_submit() and ((form3.category.data == "Выберети категорию" and form3.new_category.data != "") or (form3.category.data != "Выберети категорию" and form3.new_category.data == "")):
+        if form3.validate_on_submit() and (
+                (form3.category.data == "Выберети категорию" and form3.new_category.data != "") or (
+                form3.category.data != "Выберети категорию" and form3.new_category.data == "")):
             db_sess = db_session.create_session()
 
             file = request.files["file"]
@@ -243,18 +267,18 @@ def add():
                 description=form3.description.data,
                 category=caty,
                 rate=0,
-                image="/static/img/"+filename,
+                image="/static/img/" + filename,
             )
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
-            #img = form3.image
-            #img.file.save(os.path.join(app.config['UPLOAD_FOLDER'], form3.image.file.filename))
+            # img = form3.image
+            # img.file.save(os.path.join(app.config['UPLOAD_FOLDER'], form3.image.file.filename))
 
             db_sess.add(product)
             db_sess.commit()
             return redirect('/')
         return render_template('add.html', title='Добавление товара', form2=form2,
-                                form3=form3)
+                               form3=form3)
     else:
         return redirect('/')
 
@@ -281,10 +305,24 @@ def pay():
 
     form3 = PayForm()
     if form3.validate_on_submit():
+        if current_user.balance >= summ:
+            new_bal = current_user.balance - summ
+            db_sess = db_session.create_session()
+            for i in ords:
+                a = db_sess.query(Association).filter(Association.user_id == int(current_user.id),
+                                                      Association.orders_id == i).first()
+                db_sess.delete(a)
+                db_sess.commit()
+
+            con = sqlite3.connect(db)
+            cur = con.cursor()
+            cur.execute("UPDATE users SET balance = ? WHERE id = ?", (new_bal, current_user.id))
+            con.commit()
+
         return redirect('/')
 
     return render_template("pay.html", title='Оплата', goods=goods,
-                           ords=ords, summ=summ, form2=form2, form3=form3)
+                           ords=ords, summ=summ, form2=form2, form3=form3, balance=current_user.balance)
 
 
 @app.route('/favorites', methods=['GET', 'POST'])
@@ -416,7 +454,7 @@ def reqister():
                 name=form.name.data,
                 email=form.email.data,
                 role="user",
-                balance=0
+                balance=1000
             )
         user.set_password(form.password.data)
         db_sess.add(user)
@@ -456,5 +494,3 @@ def login():
 
 if __name__ == '__main__':
     main()
-
-

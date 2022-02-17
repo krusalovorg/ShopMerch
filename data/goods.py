@@ -15,4 +15,5 @@ class Goods(SqlAlchemyBase):
     category = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     rate = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
     image = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    sale = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
     # user = orm.relation('User')

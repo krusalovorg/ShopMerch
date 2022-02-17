@@ -12,8 +12,8 @@
 
 
 
-    </style>
 
+    </style>
     <meta charset="utf-8">
     <meta name="viewport"
           content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -47,7 +47,7 @@
                         {{ form2.submit_s(type="submit", class="btn
                         btn-outline-light") }}
                     </form>
-                    {% if current_user.id == 1 %}
+                    {% if current_user.role == "admin" %}
                     <div>
                         <a class="btn btn-outline-light" aria-current="page"
                            href="/add">Добавить товар</a>
@@ -55,6 +55,9 @@
                     {% endif %}
                     <div>
                         {% if current_user.is_authenticated %}
+
+                        <a>Balance: {{current_user.balance}}</a>
+
                         <a class="navbar-brand" href="/logout">{{
                             current_user.name }}</a>
                         {% else %}

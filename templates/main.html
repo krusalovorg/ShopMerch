@@ -40,6 +40,8 @@
 
 
 
+
+
 </script>
 
 <script>
@@ -50,6 +52,12 @@ function remove(id,type) {
     func(id,type)
     window.location.reload()
 }
+function add_sale(id, type) {
+    func(id,`sale ${document.getElementById(`sale ${String(id)}`).value}`)
+    window.location.reload()
+}
+
+
 </script>
 
 <p align="center" style="font-size:35px">Категории</p>
@@ -66,6 +74,8 @@ function remove(id,type) {
 <div class="row item">
     {% if role == "admin" %}
     <button class="btn btn-danger" onclick="remove({{item.id}}, 'remove')">Delete</button>
+    <button class="btn btn-success" onclick="add_sale({{item.id}}, 'add_sale')">Add sale</button>
+    <input id="sale {{item.id}}">
     {% endif %}
     <div class="col-3 itemin">
         <img src={{item.image}} alt="" width="150" height="150"
@@ -73,7 +83,11 @@ function remove(id,type) {
     </div>
     <div class="col itemin">
         <h4>
-            <a class="prod_url" href="/product/{{ item.id }}">{{item.title}}</a> - {{item.cost}} руб.
+            <a class="prod_url" href="/product/{{ item.id }}">{{item.title}}</a> - {{item.cost - item.cost * (item.sale
+            / 100)}} руб.
+            {% if item.sale > 0 %}
+            <button type="button" class="btn btn-warning">СКИДКА {{item.sale}}%</button>
+            {%endif%}
         </h4>
         {% for j in range(item.rate) %}
         <img align="center" src=/static/img/i2.png alt="" width="25" height="25"
