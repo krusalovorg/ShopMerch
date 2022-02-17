@@ -243,7 +243,7 @@ def add():
                 description=form3.description.data,
                 category=caty,
                 rate=0,
-                image="static/img/"+filename,
+                image="/static/img/"+filename,
             )
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
