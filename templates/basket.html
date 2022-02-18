@@ -36,7 +36,7 @@
 
 <h1>Ваша корзина</h1>
 {% if current_user.is_authenticated %}
-<div class="ll">
+<div style="width: 100%;" class="ll">
     <h4 class="ll" align="center">Товаров в корзине на сумму - {{summ}} рублей</h4>
     <a class="btn btn-outline-success" href="/pay">Оплатить всё</a>
 </div>
@@ -44,37 +44,40 @@
 {% if ords %}
 {% for item in goods %}
 {% if item.id in ords %}
-
-<div class="row item">
-
-    <div class="col-3 itemin">
-        <img src={{item.image}} alt="" width="150" height="150"
+<div class='contract-card'>
+    <img style="margin-left: auto; margin-right: auto; margin-bottom: 10px;" src={{item.image}} class='card-img' alt="" width="150" height="150">
+        <a style="font-size: 1.3rem; width:100%; font-weight: bold;" class="prod_url" href="/product/{{ item.id }}">{{item.title}}</a><h4 class="tx">{{item.category}}</h4>
+        <h4 style="width: 100%;">{{item.cost}} руб.</h4><br>
+    <div style="width: 100%; margin-bottom: 15px;">
+    {% for j in range(item.rate) %}
+        <img align="center" src=/static/img/i2.png alt="" width="25" height="25"
              class="d-inline-block align-text-top">
+        {% endfor %}
+        {% if 5 - item.rate > 0 %}
+        {% for j in range(5 - item.rate) %}
+        <img align="center" src=/static/img/i.png alt="" width="25" height="25"
+             class="d-inline-block align-text-top">
+        {% endfor %}
+    {% endif %}
     </div>
-    <div class="col itemin">
-        <h4>
-            <a class="prod_url" href="/product/{{ item.id }}">{{item.title}}</a> - {{item.cost}} руб.
-        </h4>
-
-        <h4 class="tx">{{item.category}}</h4>
-
-        <div class="checks" align="right">
-            <div>
-                <div class="form-check form-check-inline">
-                    {% if item.id in ords %}
-                    <input type="checkbox" class="btn-check" id="{{item.id + 100}}" onchange="func(id, 2)"
-                           checked>
-                    <label class="btn btn-outline-success" for="{{item.id + 100}}">В корзине</label>
-                    {% else %}
-                    <input type="checkbox" class="btn-check" id="{{item.id + 100}}" onchange="func(id, 2)">
-                    <label class="btn btn-outline-success" for="{{item.id + 100}}">В корзину</label>
-                    {% endif %}
-                </div>
+    <br>
+    
+    <div class="checks" align="right">
+        <div>
+            <div class="form-check form-check-inline">
+                {% if item.id in ords %}
+                <input type="checkbox" class="btn-check" id="{{item.id + 100}}" onchange="func(id, 2)"
+                       checked>
+                <label class="btn btn-outline-success" for="{{item.id + 100}}">В корзине</label>
+                {% else %}
+                <input type="checkbox" class="btn-check" id="{{item.id + 100}}" onchange="func(id, 2)">
+                <label class="btn btn-outline-success" for="{{item.id + 100}}">В корзину</label>
+                {% endif %}
             </div>
         </div>
     </div>
-
 </div>
+
 {% endif %}
 {% endfor %}
 {% else %}

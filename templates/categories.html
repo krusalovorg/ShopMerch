@@ -57,21 +57,16 @@ function alertreg(time){
     {% endfor %}
 </p>
 
-<h4>Товаров в категории {{cat}} - {{col}}</h4>
+<h4 style="text-align: center;">Товаров в категории {{cat}} - {{col}}</h4>
 {% for item in goods %}
 {% if item.category == cat %}
 
-<div class="row item">
-
-    <div class="col-3 itemin">
-        <img src={{item.image}} alt="" width="150" height="150"
-             class="d-inline-block align-text-top">
-    </div>
-    <div class="col itemin">
-        <h4>
-            <a class="prod_url" href="/product/{{ item.id }}">{{item.title}}</a> - {{item.cost}} руб.
-        </h4>
-        {% for j in range(item.rate) %}
+<div class='contract-card'>
+    <img style="margin-left: auto; margin-right: auto; margin-bottom: 10px;" src={{item.image}} class='card-img' alt="" width="150" height="150">
+        <a style="font-size: 1.3rem; width:100%; font-weight: bold;" class="prod_url" href="/product/{{ item.id }}">{{item.title}}</a><h4 class="tx">{{item.category}}</h4>
+        <h4 style="width: 100%;">{{item.cost}} руб.</h4><br>
+    <div style="width: 100%; margin-bottom: 15px;">
+    {% for j in range(item.rate) %}
         <img align="center" src=/static/img/i2.png alt="" width="25" height="25"
              class="d-inline-block align-text-top">
         {% endfor %}
@@ -80,43 +75,43 @@ function alertreg(time){
         <img align="center" src=/static/img/i.png alt="" width="25" height="25"
              class="d-inline-block align-text-top">
         {% endfor %}
-        {% endif %}
-        <h4 class="tx">{{item.category}}</h4>
+    {% endif %}
+    </div>
+    <br>
+    
+    <div class="checks" align="right">
+        <div>
+            <div class="form-check form-check-inline">
+                {% if current_user.is_authenticated %}
+                {% if item.id in favs %}
+                <input type="checkbox" class="btn-check" id="{{item.id}}" onchange="func(id, 1)"
+                       checked>
+                <label style="margin: 10px;"class="btn btn-outline-success" for="{{item.id}}">В избранном</label>
+                {% else %}
+                <input type="checkbox" class="btn-check" id="{{item.id}}" onchange="func(id, 1)">
+                <label style="margin: 10px;"class="btn btn-outline-success" for="{{item.id}}">В избранное</label>
+                {% endif %}
 
-        <div class="checks" align="right">
-            <div>
-                <div class="form-check form-check-inline">
-                    {% if current_user.is_authenticated %}
-                    {% if item.id in favs %}
-                    <input type="checkbox" class="btn-check" id="{{item.id}}" onchange="func(id, 1)"
-                           checked>
-                    <label class="btn btn-outline-success" for="{{item.id}}">В избранном</label>
-                    {% else %}
-                    <input type="checkbox" class="btn-check" id="{{item.id}}" onchange="func(id, 1)">
-                    <label class="btn btn-outline-success" for="{{item.id}}">В избранное</label>
-                    {% endif %}
+                {% if item.id in ords %}
+                <input type="checkbox" class="btn-check" id="{{item.id + 100}}" onchange="func(id, 2)"
+                       checked>
+                <label style="margin: 10px;"class="btn btn-outline-success" for="{{item.id + 100}}">В корзине</label>
+                {% else %}
+                <input type="checkbox" class="btn-check" id="{{item.id + 100}}" onchange="func(id, 2)">
+                <label style="margin: 10px;"class="btn btn-outline-success" for="{{item.id + 100}}">В корзину</label>
+                {% endif %}
+                {% else %}
+                <input type="checkbox" class="btn-check" id="{{item.id}}" onchange="alertreg()">
+                <label style="margin: 10px;"class="btn btn-outline-success" for="{{item.id}}">В избранное</label>
+                <input type="checkbox" class="btn-check" id="{{item.id + 100}}" onchange="alertreg()">
+                <label style="margin: 10px;"class="btn btn-outline-success" for="{{item.id + 100}}">В корзину</label>
+                {% endif %}
 
-                    {% if item.id in ords %}
-                    <input type="checkbox" class="btn-check" id="{{item.id + 100}}" onchange="func(id, 2)"
-                           checked>
-                    <label class="btn btn-outline-success" for="{{item.id + 100}}">В корзине</label>
-                    {% else %}
-                    <input type="checkbox" class="btn-check" id="{{item.id + 100}}" onchange="func(id, 2)">
-                    <label class="btn btn-outline-success" for="{{item.id + 100}}">В корзину</label>
-                    {% endif %}
-                    {% else %}
-                    <input type="checkbox" class="btn-check" id="{{item.id}}" onchange="alertreg()">
-                    <label class="btn btn-outline-success" for="{{item.id}}">В избранное</label>
-                    <input type="checkbox" class="btn-check" id="{{item.id + 100}}" onchange="alertreg()">
-                    <label class="btn btn-outline-success" for="{{item.id + 100}}">В корзину</label>
-                    {% endif %}
-
-                </div>
             </div>
         </div>
     </div>
-
 </div>
+
 {% endif %}
 {% endfor %}
 

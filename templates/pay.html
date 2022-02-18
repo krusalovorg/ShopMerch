@@ -3,25 +3,10 @@
 <h1>Оплата товаров из корзины</h1>
 {% if current_user.is_authenticated %}
 {% if ords %}
-
-<script type="text/javascript">
-    function checkbal() {
-    if (Number({{summ}}) > Number({{ current_user.balance }})) {
-        alert('Недостаточно средств!');
-    } else {
-        alert('Оплата прошла успешно!');
-    }
-    }
-
-
-
-
-</script>
-
 <h4>Вы должны оплатить товары на сумму - {{summ}} рублей</h4>
 
 <div class="pay">
-    <form class="d-flex" onsubmit="checkbal()" method="post" novalidate>
+    <form class="d-flex" method="post" novalidate>
         {{ form3.hidden_tag() }}
         {{ form3.tttle.label }}<br>
         {{ form3.tttle(class="form-control me-2") }}<br>
@@ -30,7 +15,7 @@
             {{ error }}
         </p>
         {% endfor %}
-        {{ form3.submit2(type="submit", id="subbtn", class="btn
+        {{ form3.submit2(type="submit", class="btn
         btn-outline-success") }}
     </form>
 </div>
