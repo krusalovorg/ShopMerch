@@ -593,7 +593,8 @@ text-decoration: none;
   padding: 30px 20px 30px 20px;
   transition: 0.5s;
   box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
-
+  min-height: 535px !important;
+  height: 535px !important;
 }
 .contract-card:hover{
 transform: scale(1.04);

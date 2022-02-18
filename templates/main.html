@@ -50,6 +50,10 @@ function remove(id,type) {
     func(id,type)
     window.location.reload()
 }
+function add_sale(id, type) {
+    func(id,`sale ${document.getElementById(`sale ${String(id)}`).value}`)
+    window.location.reload()
+}
 </script>
 
 <p align="center" style="font-size:35px">Категории</p>
@@ -63,9 +67,14 @@ function remove(id,type) {
 
 {% for item in goods %}
 <div class='contract-card'>
+    {% if role == "admin" %}
+        <button class="btn btn-success" onclick="add_sale({{item.id}}, 'add_sale')">Add sale</button>
+        <input id="sale {{item.id}}">
+    {% endif %}
     <img style="margin-left: auto; margin-right: auto; margin-bottom: 10px;" src={{item.image}} class='card-img' alt="" width="150" height="150">
         <a style="font-size: 1.3rem; width:100%; font-weight: bold;" class="prod_url" href="/product/{{ item.id }}">{{item.title}}</a><h4 class="tx">{{item.category}}</h4>
         <h4 style="width: 100%;">{{item.cost}} руб.</h4><br>
+        <h5>{% if item.sale > 0 %}Скидка: {{item.sale}}%{%endif%}</h5>
     <div style="width: 100%; margin-bottom: 15px;">
     {% for j in range(item.rate) %}
         <img align="center" src=/static/img/i2.png alt="" width="25" height="25"
