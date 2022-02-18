@@ -48,11 +48,16 @@ function alertreg(time){
 </script>
 {% for item in goods %}
 {% if item.id == i_id %}
-<div class="item">
-    <p>
+<div style="margin-left: auto;margin-right: auto; width: 70%;">
+<div class="left">
+    <img style="margin-right: 40px; height: auto;" align="left" src={{item.image}} alt="" width="400" height="370">
+</div>
+<div class="right">
     <h4>
-        <a class="prod_url" href="/product/{{ item.id }}">{{item.title}}</a> - {{item.cost}} баллов.
-
+        <a style="width: 100%;margin-top: 20px;" class="prod_url" href="/product/{{ item.id }}">{{item.title}}</a> - {{item.cost}} баллов
+    </h4>
+    <h4 style="margin-bottom: 10px;" class="tx">{{item.category}}</h4>
+    <div style="width: 100%;margin-bottom: 10px;">
         {% for j in range(item.rate) %}
         <img align="center" src=/static/img/i2.png alt="" width="25" height="25"
              class="d-inline-block align-text-top">
@@ -63,22 +68,13 @@ function alertreg(time){
              class="d-inline-block align-text-top">
         {% endfor %}
         {% endif %}
-    </h4>
-    <h4 class="tx">{{item.category}}</h4>
-    </p>
-</div>
-
-<div class="row item">
-
-    <div class="col-5 itemin">
-        <img align="left" src={{item.image}} alt="" width="400" height="370">
     </div>
-    <div class="col itemin">
-        <h6 align="right">{{item.description}}</h6>
+    
+    <p>{{item.description}}</p>
 
-        <div class="checks" align="right">
+        <div class="checks">
             <div>
-                <div class="form-check form-check-inline">
+                <div style="padding-left: 0;" class="form-check form-check-inline">
                     {% if current_user.is_authenticated %}
                     {% if item.id in favs %}
                     <input type="checkbox" class="btn-check" id="{{item.id}}" onchange="func(id, 1)"
@@ -107,7 +103,7 @@ function alertreg(time){
                 </div>
             </div>
         </div>
-    </div>
+</div>
 </div>
 {% endif %}
 {% endfor %}
