@@ -3,7 +3,7 @@
 <h1>Оплата товаров из корзины</h1>
 {% if current_user.is_authenticated %}
 {% if ords %}
-<h4>Вы должны оплатить товары на сумму - {{summ}} рублей</h4>
+<h4>Вы должны оплатить товары на сумму - {{summ}} баллов</h4>
 
 <div class="pay">
     <form class="d-flex" method="post" novalidate>
@@ -29,7 +29,7 @@
     </div>
     <div class="col itemin">
         <h4>
-            <a class="prod_url" href="/product/{{ item.id }}">{{item.title}}</a> - {{item.cost}} руб.
+            <a class="prod_url" href="/product/{{ item.id }}">{{item.title}}</a> - {{item.cost}} баллов.
         </h4>
         <h4 class="tx">{{item.category}}</h4>
 
